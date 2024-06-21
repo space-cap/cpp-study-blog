@@ -3,14 +3,18 @@
 #include "CorePch.h"
 #include <thread>
 #include <atomic>
+#include <mutex>
 
 vector<int32> v;
+mutex m;
 
 void Push()
 {
 	for(int32 i=0; i<1000; ++i)
 	{
-		v.push_back(1);
+		m.lock();
+		v.push_back(i);
+		m.unlock();
 	}
 }
 
