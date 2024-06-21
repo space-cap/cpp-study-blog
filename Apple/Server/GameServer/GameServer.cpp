@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include <iostream>
 #include "CorePch.h"
 #include <thread>
@@ -10,7 +10,7 @@ void printMessage(const std::string& message) {
 
 int main()
 {
-	std::thread t(printMessage, "½º·¹µå 1¿¡¼­ º¸³À´Ï´Ù.");
+	std::thread t(printMessage, "í•œê¸€");
 	
 
 	cout << "hello main" << endl;
