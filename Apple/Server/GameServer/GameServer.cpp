@@ -4,13 +4,13 @@
 #include <thread>
 #include <atomic>
 
-std::atomic<int32>(sum){};
+std::atomic<int32> sum(0);
 
 void add()
 {
 	for(int32 i=0; i<100'0000; ++i)
 	{
-        sum += i;
+        sum.fetch_add(1);
 	}
 }
 
@@ -19,7 +19,7 @@ void sub()
 {
     for (int32 i = 0; i < 100'0000; ++i)
     {
-        sum -= i;
+        sum.fetch_sub(1);
     }
 }
 
