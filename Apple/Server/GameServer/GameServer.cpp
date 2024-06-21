@@ -4,13 +4,12 @@
 #include <thread>
 
 
-void printMessage(const std::string& message) {
-	std::cout << message << std::endl;
-}
 
 int main()
 {
-	std::thread t(printMessage, "한글");
+	std::thread t([] {
+		std::cout << "스레드에서 보냅니다." << std::endl;
+		});
 	
 
 	cout << "hello main" << endl;
