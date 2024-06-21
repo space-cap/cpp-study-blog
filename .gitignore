@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+/Apple/Server/ServerCore/x64
+/Apple/Server/GameServer/x64
+/Apple/Server/.vs
+/Apple/Server/Binary/Debug
+/Apple/Server/Libraries/Debug
+/Apple/Server/x64
