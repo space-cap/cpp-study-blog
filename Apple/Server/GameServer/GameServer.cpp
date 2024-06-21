@@ -8,13 +8,35 @@
 vector<int32> v;
 mutex m;
 
+// RAII(Resource Acquisition Is Initialization) 패턴
+template<typename T>
+class LockGuard
+{
+public:
+	LockGuard(T& m)
+	{
+		_mutex = &m;
+		_mutex->lock();
+	}
+
+	~LockGuard()
+	{
+		_mutex->unlock();
+	}
+
+private:
+	T* _mutex;
+};
+
+
 void Push()
 {
 	for(int32 i=0; i<1000; ++i)
 	{
-		m.lock();
+		//m.lock();
+		LockGuard<std::mutex> lockGuard(m);
 		v.push_back(i);
-		m.unlock();
+		//m.unlock();
 	}
 }
 
