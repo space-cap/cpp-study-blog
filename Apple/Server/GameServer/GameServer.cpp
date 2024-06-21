@@ -2,8 +2,9 @@
 #include <iostream>
 #include "CorePch.h"
 #include <thread>
+#include <atomic>
 
-int32 sum = 0;
+std::atomic<int32>(sum){};
 
 void add()
 {
