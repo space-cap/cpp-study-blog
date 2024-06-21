@@ -34,7 +34,8 @@ void Push()
 	for(int32 i=0; i<1000; ++i)
 	{
 		//m.lock();
-		LockGuard<std::mutex> lockGuard(m);
+		//LockGuard<std::mutex> lockGuard(m);
+		std::lock_guard<std::mutex> lockGuard(m);
 		v.push_back(i);
 		//m.unlock();
 	}
