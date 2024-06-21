@@ -4,42 +4,28 @@
 #include <thread>
 #include <atomic>
 
-std::atomic<int32> sum(0);
+vector<int32> v;
 
-void add()
+void Push()
 {
-	for(int32 i=0; i<100'0000; ++i)
+	for(int32 i=0; i<1000; ++i)
 	{
-        sum.fetch_add(1);
+		v.push_back(i);
 	}
 }
 
 
-void sub()
+
+int main()
 {
-    for (int32 i = 0; i < 100'0000; ++i)
-    {
-        sum.fetch_sub(1);
-    }
-}
+	thread t1(Push);
+	thread t2(Push);
+
+	t1.join();
+	t2.join();
 
 
-
-
-int main() {
-
-    add();
-    sub();
-
-    cout << sum << endl;
-
-    std::thread t1(add);
-    std::thread t2(sub);
-
-    t1.join();
-    t2.join();
-
-    cout << sum << endl;
+    
 
 
     return 0;
