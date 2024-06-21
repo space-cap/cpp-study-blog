@@ -3,16 +3,43 @@
 #include "CorePch.h"
 #include <thread>
 
+int32 sum = 0;
 
-void doWork() {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::cout << "작업 완료!" << std::endl;
+void add()
+{
+	for(int32 i=0; i<100'0000; ++i)
+	{
+        sum += i;
+	}
 }
 
+
+void sub()
+{
+    for (int32 i = 0; i < 100'0000; ++i)
+    {
+        sum -= i;
+    }
+}
+
+
+
+
 int main() {
-    std::thread t(doWork);
-    t.detach();
-    std::cout << "스레드 분리됨." << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+
+    add();
+    sub();
+
+    cout << sum << endl;
+
+    std::thread t1(add);
+    std::thread t2(sub);
+
+    t1.join();
+    t2.join();
+
+    cout << sum << endl;
+
+
     return 0;
 }
