@@ -26,13 +26,7 @@ int main()
 	t1.join();
 	t2.join();
 
-	int32 sum{ 0 };
-	for (auto i : v)
-	{
-		sum += i;
-	}
-
-	cout << sum << endl;
+	cout << v.size() << endl;
 
 	return 0;
 }
