@@ -9,7 +9,7 @@
 
 void Func1()
 {
-	for (int32 i = 0; i < 1; ++i)
+	for (int32 i = 0; i < 100; ++i)
 	{
 		UserManager::Instance()->ProcessSave();
 	}
@@ -17,7 +17,7 @@ void Func1()
 
 void Func2()
 {
-	for (int32 i = 0; i < 1; ++i)
+	for (int32 i = 0; i < 100; ++i)
 	{
 		AccountManager::Instance()->ProcessLogin();
 	}

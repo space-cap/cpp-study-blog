@@ -4,6 +4,7 @@
 
 void AccountManager::ProcessLogin()
 {
+	// account lock
 	lock_guard<mutex> guard(_mutex);
 
 	// user lock
