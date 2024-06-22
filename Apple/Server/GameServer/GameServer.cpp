@@ -30,6 +30,9 @@ public:
 			return false;
 		}*/
 
+		
+		std::atomic_flag lock_flag = ATOMIC_FLAG_INIT;
+
 
 		while(_locked.compare_exchange_strong(expected, desired) == false)
 		{
