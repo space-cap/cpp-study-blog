@@ -4,56 +4,34 @@
 #include <thread>
 #include <atomic>
 #include <mutex>
+#include "AccountManager.h"
+#include "UserManager.h"
 
-vector<int32> v;
-mutex m;
-
-// RAII(Resource Acquisition Is Initialization) 패턴
-template<typename T>
-class LockGuard
+void Func1()
 {
-public:
-	LockGuard(T& m)
+	for (int32 i = 0; i < 1; ++i)
 	{
-		_mutex = &m;
-		_mutex->lock();
-	}
-
-	~LockGuard()
-	{
-		_mutex->unlock();
-	}
-
-private:
-	T* _mutex;
-};
-
-
-void Push()
-{
-	for(int32 i=0; i<1000; ++i)
-	{
-		//m.lock();
-		//LockGuard<std::mutex> lockGuard(m);
-		std::lock_guard<std::mutex> lockGuard(m);
-		v.push_back(i);
-		//m.unlock();
+		UserManager::Instance()->ProcessSave();
 	}
 }
 
-
+void Func2()
+{
+	for (int32 i = 0; i < 1; ++i)
+	{
+		AccountManager::Instance()->ProcessLogin();
+	}
+}
 
 int main()
 {
-	v.reserve(20000);
-
-	thread t1(Push);
-	thread t2(Push);
+	std::thread t1(Func1);
+	std::thread t2(Func2);
 
 	t1.join();
 	t2.join();
 
-	cout << v.size() << endl;
+	cout << "jobs done" << endl;
 
 	return 0;
 }
