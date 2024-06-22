@@ -11,34 +11,18 @@ class SpinLock
 public:
 	void lock()
 	{
-
 		// CAS ( Compare-And-Swap)
-
 		bool expected = false;
 		bool desired = true;
-
-		// CAS 의사 코드
-		/*if(_locked == expected)
-		{
-			expected = _locked;
-			_locked = desired;
-			return true;
-		}
-		else
-		{
-			expected = _locked;
-			return false;
-		}*/
-
-		
-		std::atomic_flag lock_flag = ATOMIC_FLAG_INIT;
-
 
 		while(_locked.compare_exchange_strong(expected, desired) == false)
 		{
 			expected = false;
-		}
 
+			//this_thread::sleep_for(chrono::milliseconds(100));
+			this_thread::sleep_for(0ms);
+			// this_thread::yield(); // 
+		}
 	}
 
 	void unlock()
