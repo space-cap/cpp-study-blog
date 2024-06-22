@@ -33,5 +33,18 @@ int main()
 
 	cout << "jobs done" << endl;
 
+
+
+	// 참고 // 잠금 순서 정하기
+	mutex m1;
+	mutex m2;
+	std::lock(m1, m2);
+
+	// adopt_lock : 이미 lock된 상태니깐, 나중에 소멸될 때 풀어줘
+	lock_guard<mutex> g1(m1, std::adopt_lock);
+	lock_guard<mutex> g2(m2, std::adopt_lock);
+
+
+
 	return 0;
 }
