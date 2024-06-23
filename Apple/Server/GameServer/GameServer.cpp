@@ -7,6 +7,8 @@
 #include <windows.h>
 #include <future>
 
+
+// 가시성, 코드 재배치
 int32 x = 0;
 int32 y = 0;
 int32 r1 = 0;
