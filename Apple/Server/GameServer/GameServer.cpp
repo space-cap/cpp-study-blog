@@ -20,6 +20,13 @@ int64 Calculate()
 	return sum;
 }
 
+
+void PromiseWorker(std::promise<string>&& promise)
+{
+	promise.set_value("secret message");
+}
+
+
 int main()
 {
 	int64 sum = Calculate();
@@ -35,23 +42,26 @@ int main()
 
 		// todo
 
-		int64 sum = future.get();
-
-
-		class Knight
-		{
-		public:
-			int64 GetHp()
-			{
-				return 100;
-			}
-		};
-
-		Knight knight;
-		std::future<int64> future2 = std::async(std::launch::async, &Knight::GetHp, knight); // knight.GetHp()
-
+		int64 sum = future.get(); // 이제 결과물이 필요해.
 
 	}
+
+	// std::promise
+	{
+		// 미래(std::future)에 결과물을 반환해 줄꺼라 약속(std::promise)해줘 ~ 계약서??
+		std::promise<string> promise;
+		std::future<string> future = promise.get_future();
+
+		thread t(PromiseWorker, std::move(promise));
+
+		string message = future.get();
+		cout << message << endl;
+
+
+		t.join();
+	}
+
+
 
 	return 0;
 }
