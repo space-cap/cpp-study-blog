@@ -35,14 +35,22 @@ int main()
 
 		// todo
 
-		// 준비가 되었는지 확인하고 싶을 때
-		std::future_status status = future.wait_for(1ms);
-		if(status == future_status::ready)
-		{
-			
-		}
-
 		int64 sum = future.get();
+
+
+		class Knight
+		{
+		public:
+			int64 GetHp()
+			{
+				return 100;
+			}
+		};
+
+		Knight knight;
+		std::future<int64> future2 = std::async(std::launch::async, &Knight::GetHp, knight); // knight.GetHp()
+
+
 	}
 
 	return 0;
