@@ -21,8 +21,13 @@
     <ClCompile Include="pch.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="CoreTLS.cpp" />
-    <ClCompile Include="CoreMacro.cpp" />
+    <ClCompile Include="CoreMacro.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreTLS.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreGlobal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -34,7 +39,12 @@
     <ClInclude Include="Types.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="CoreTLS.h" />
-    <ClInclude Include="CoreMacro.h" />
+    <ClInclude Include="CoreMacro.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreTLS.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreGlobal.h" />
   </ItemGroup>
 </Project>
