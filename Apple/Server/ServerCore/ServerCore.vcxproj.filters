@@ -22,6 +22,7 @@
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="CoreTLS.cpp" />
+    <ClCompile Include="CoreMacro.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -34,5 +35,6 @@
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="CoreTLS.h" />
+    <ClInclude Include="CoreMacro.h" />
   </ItemGroup>
 </Project>
