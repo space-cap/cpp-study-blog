@@ -27,7 +27,10 @@
     <ClCompile Include="CoreTLS.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="CoreGlobal.cpp" />
+    <ClCompile Include="CoreGlobal.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -45,6 +48,9 @@
     <ClInclude Include="CoreTLS.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="CoreGlobal.h" />
+    <ClInclude Include="CoreGlobal.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadManager.h" />
   </ItemGroup>
 </Project>
