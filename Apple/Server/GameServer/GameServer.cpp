@@ -9,50 +9,98 @@
 
 
 
+#include <atomic>
+#include <iostream>
+
 template<typename T>
-class LockFreeStack {
+class LockFreeQueue {
 private:
     struct Node {
         T data;
-        Node* next;
+        std::atomic<Node*> next;
         Node(T const& data) : data(data), next(nullptr) {}
     };
 
     std::atomic<Node*> head;
+    std::atomic<Node*> tail;
 
 public:
-    LockFreeStack() : head(nullptr) {}
+    LockFreeQueue() {
+        Node* dummy = new Node(T());
+        head.store(dummy);
+        tail.store(dummy);
+    }
 
-    void push(T const& data) {
-        Node* new_node = new Node(data);
-        new_node->next = head.load(std::memory_order_relaxed);
-        while (!head.compare_exchange_weak(new_node->next, new_node, std::memory_order_release, std::memory_order_relaxed)) {
-            // CAS 실패, new_node->next 업데이트, 재시도
+    ~LockFreeQueue() {
+        while (Node* node = head.load()) {
+            head.store(node->next);
+            delete node;
         }
     }
 
-    bool pop(T& result) {
+    void enqueue(T const& data) {
+        Node* new_node = new Node(data);
+        Node* old_tail = tail.load(std::memory_order_relaxed);
+
+        while (true) {
+            Node* next = old_tail->next.load(std::memory_order_relaxed);
+            if (old_tail == tail.load(std::memory_order_relaxed)) {
+                if (next == nullptr) {
+                    if (old_tail->next.compare_exchange_weak(next, new_node, std::memory_order_release, std::memory_order_relaxed)) {
+                        tail.compare_exchange_weak(old_tail, new_node, std::memory_order_release, std::memory_order_relaxed);
+                        return;
+                    }
+                }
+                else {
+                    tail.compare_exchange_weak(old_tail, next, std::memory_order_release, std::memory_order_relaxed);
+                }
+            }
+            else {
+                old_tail = tail.load(std::memory_order_relaxed);
+            }
+        }
+    }
+
+    bool dequeue(T& result) {
         Node* old_head = head.load(std::memory_order_relaxed);
-        while (old_head && !head.compare_exchange_weak(old_head, old_head->next, std::memory_order_acquire, std::memory_order_relaxed)) {
-            // CAS 실패, old_head 업데이트, 재시도
+
+        while (true) {
+            Node* old_tail = tail.load(std::memory_order_relaxed);
+            Node* next = old_head->next.load(std::memory_order_relaxed);
+
+            if (old_head == head.load(std::memory_order_relaxed)) {
+                if (old_head == old_tail) {
+                    if (next == nullptr) {
+                        return false; // Queue is empty
+                    }
+                    tail.compare_exchange_weak(old_tail, next, std::memory_order_release, std::memory_order_relaxed);
+                }
+                else {
+                    if (next == nullptr) {
+                        return false;
+                    }
+                    result = next->data;
+                    if (head.compare_exchange_weak(old_head, next, std::memory_order_release, std::memory_order_relaxed)) {
+                        delete old_head;
+                        return true;
+                    }
+                }
+            }
+            else {
+                old_head = head.load(std::memory_order_relaxed);
+            }
         }
-        if (old_head) {
-            result = old_head->data;
-            delete old_head;
-            return true;
-        }
-        return false; // 스택이 비어 있음
     }
 };
 
 int main() {
-    LockFreeStack<int> stack;
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
+    LockFreeQueue<int> queue;
+    queue.enqueue(1);
+    queue.enqueue(2);
+    queue.enqueue(3);
 
     int value;
-    while (stack.pop(value)) {
+    while (queue.dequeue(value)) {
         std::cout << value << std::endl;
     }
 
