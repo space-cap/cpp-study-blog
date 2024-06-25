@@ -8,91 +8,79 @@
 #include <future>
 #include "ThreadManager.h"
 
-#include <atomic>
-#include <thread>
-#include <iostream>
 
-class ReadWriteSpinLock {
-private:
-    std::atomic<int> readers_count;
-    std::atomic<bool> writer;
+
+
+
+class TestLock
+{
+	USE_LOCK;
 
 public:
-    ReadWriteSpinLock() : readers_count(0), writer(false) {}
+	int32 TestRead()
+	{
+		READ_LOCK;
 
-    void lock_read() {
-        while (true) {
-            // 기다리는 동안 작성자가 없을 때까지 대기
-            while (writer.load(std::memory_order_acquire)) {
-                std::this_thread::yield(); // 잠깐 대기
-            }
+		if (_queue.empty())
+			return -1;
 
-            readers_count.fetch_add(1, std::memory_order_acquire);
+		return _queue.front();
+	}
 
-            // 작성자가 없는지 다시 확인
-            if (!writer.load(std::memory_order_acquire)) {
-                break;
-            }
+	void TestPush()
+	{
+		WRITE_LOCK;
 
-            readers_count.fetch_sub(1, std::memory_order_release);
-        }
-    }
+		_queue.push(rand() % 100);
+	}
 
-    void unlock_read() {
-        readers_count.fetch_sub(1, std::memory_order_release);
-    }
+	void TestPop()
+	{
+		WRITE_LOCK;
 
-    void lock_write() {
-        while (writer.exchange(true, std::memory_order_acquire)) {
-            std::this_thread::yield(); // 잠깐 대기
-        }
+		if (_queue.empty() == false)
+			_queue.pop();
+	}
 
-        while (readers_count.load(std::memory_order_acquire) != 0) {
-            std::this_thread::yield(); // 잠깐 대기
-        }
-    }
-
-    void unlock_write() {
-        writer.store(false, std::memory_order_release);
-    }
+private:
+	queue<int32> _queue;
 };
 
-// 테스트 예제
-int main() {
-    ReadWriteSpinLock rw_lock;
+TestLock testLock;
 
-    // 읽기 작업
-    auto reader = [&rw_lock](int id) {
-        rw_lock.lock_read();
-        std::cout << "Reader " << id << " is reading.\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 읽기 작업 시뮬레이션
-        rw_lock.unlock_read();
-        };
+void ThreadWrite()
+{
+	while (true)
+	{
+		testLock.TestPush();
+		this_thread::sleep_for(1ms);
+		testLock.TestPop();
+	}
+}
 
-    // 쓰기 작업
-    auto writer = [&rw_lock](int id) {
-        rw_lock.lock_write();
-        std::cout << "Writer " << id << " is writing.\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 쓰기 작업 시뮬레이션
-        rw_lock.unlock_write();
-        };
+void ThreadRead()
+{
+	while (true)
+	{
+		int32 value = testLock.TestRead();
+		cout << value << endl;
+		this_thread::sleep_for(1ms);
+	}
+}
 
-    // 여러 읽기/쓰기 스레드 생성
-    std::thread readers[5], writers[2];
-    for (int i = 0; i < 5; ++i) {
-        readers[i] = std::thread(reader, i);
-    }
-    for (int i = 0; i < 2; ++i) {
-        writers[i] = std::thread(writer, i);
-    }
+int main()
+{
+	for (int32 i = 0; i < 2; i++)
+	{
+		GThreadManager->Launch(ThreadWrite);
+	}
 
-    // 스레드 조인
-    for (int i = 0; i < 5; ++i) {
-        readers[i].join();
-    }
-    for (int i = 0; i < 2; ++i) {
-        writers[i].join();
-    }
+	for (int32 i = 0; i < 5; i++)
+	{
+		GThreadManager->Launch(ThreadRead);
+	}
+
+	GThreadManager->Join();
 
     return 0;
 }
