@@ -1,10 +1,15 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Lock.h"
 #include "CoreTLS.h"
+#include "DeadLockProfiler.h"
 
-void Lock::WriteLock()
+void Lock::WriteLock(const char* name)
 {
-	// µ¿ÀÏÇÑ ¾²·¹µå°¡ ¼ÒÀ¯ÇÏ°í ÀÖ´Ù¸é ¹«Á¶°Ç ¼º°ø.
+#if _DEBUG
+	GDeadLockProfiler->PushLock(name);
+#endif
+
+	// ë™ì¼í•œ ì“°ë ˆë“œê°€ ì†Œìœ í•˜ê³  ìˆë‹¤ë©´ ë¬´ì¡°ê±´ ì„±ê³µ.
 	const uint32 lockThreadId = (_lockFlag.load() & WRITE_THREAD_MASK) >> 16;
 	if (LThreadId == lockThreadId)
 	{
@@ -12,7 +17,7 @@ void Lock::WriteLock()
 		return;
 	}
 
-	// ¾Æ¹«µµ ¼ÒÀ¯ ¹× °øÀ¯ÇÏ°í ÀÖÁö ¾ÊÀ» ¶§, °æÇÕÇØ¼­ ¼ÒÀ¯±ÇÀ» ¾ò´Â´Ù.
+	// ì•„ë¬´ë„ ì†Œìœ  ë° ê³µìœ í•˜ê³  ìˆì§€ ì•Šì„ ë•Œ, ê²½í•©í•´ì„œ ì†Œìœ ê¶Œì„ ì–»ëŠ”ë‹¤.
 	const int64 beginTick = ::GetTickCount64();
 	const uint32 desired = ((LThreadId << 16) & WRITE_THREAD_MASK);
 	while (true)
@@ -34,9 +39,13 @@ void Lock::WriteLock()
 	}
 }
 
-void Lock::WriteUnlock()
+void Lock::WriteUnlock(const char* name)
 {
-	// ReadLock ´Ù Ç®±â Àü¿¡´Â WriteUnlock ºÒ°¡´É.
+#if _DEBUG
+	GDeadLockProfiler->PopLock(name);
+#endif
+
+	// ReadLock ë‹¤ í’€ê¸° ì „ì—ëŠ” WriteUnlock ë¶ˆê°€ëŠ¥.
 	if ((_lockFlag.load() & READ_COUNT_MASK) != 0)
 		CRASH("INVALID_UNLOCK_ORDER");
 
@@ -45,9 +54,13 @@ void Lock::WriteUnlock()
 		_lockFlag.store(EMPTY_FLAG);
 }
 
-void Lock::ReadLock()
+void Lock::ReadLock(const char* name)
 {
-	// µ¿ÀÏÇÑ ¾²·¹µå°¡ ¼ÒÀ¯ÇÏ°í ÀÖ´Ù¸é ¹«Á¶°Ç ¼º°ø.
+#if _DEBUG
+	GDeadLockProfiler->PushLock(name);
+#endif
+
+	// ë™ì¼í•œ ì“°ë ˆë“œê°€ ì†Œìœ í•˜ê³  ìˆë‹¤ë©´ ë¬´ì¡°ê±´ ì„±ê³µ.
 	const uint32 lockThreadId = (_lockFlag.load() & WRITE_THREAD_MASK) >> 16;
 	if (LThreadId == lockThreadId)
 	{
@@ -55,7 +68,7 @@ void Lock::ReadLock()
 		return;
 	}
 
-	// ¾Æ¹«µµ ¼ÒÀ¯ÇÏ°í ÀÖÁö ¾ÊÀ» ¶§ °æÇÕÇØ¼­ °øÀ¯ Ä«¿îÆ®¸¦ ¿Ã¸°´Ù.
+	// ì•„ë¬´ë„ ì†Œìœ í•˜ê³  ìˆì§€ ì•Šì„ ë•Œ ê²½í•©í•´ì„œ ê³µìœ  ì¹´ìš´íŠ¸ë¥¼ ì˜¬ë¦°ë‹¤.
 	const int64 beginTick = ::GetTickCount64();
 	while (true)
 	{
@@ -73,8 +86,12 @@ void Lock::ReadLock()
 	}
 }
 
-void Lock::ReadUnlock()
+void Lock::ReadUnlock(const char* name)
 {
+#if _DEBUG
+	GDeadLockProfiler->PopLock(name);
+#endif
+
 	if ((_lockFlag.fetch_sub(1) & READ_COUNT_MASK) == 0)
 		CRASH("MULTIPLE_UNLOCK");
 }
