@@ -46,32 +46,6 @@ public:
 	int32 _mp = 10;
 };
 
-// new operator overloading (Global)
-void* operator new(size_t size)
-{
-	cout << "new! " << size << endl;
-	void* ptr = ::malloc(size);
-	return ptr;
-}
-
-void operator delete(void* ptr)
-{
-	cout << "delete!" << endl;
-	::free(ptr);
-}
-
-void* operator new[](size_t size)
-{
-	cout << "new[]! " << size << endl;
-	void* ptr = ::malloc(size);
-	return ptr;
-}
-
-void operator delete[](void* ptr)
-{
-	cout << "delete![]" << endl;
-	::free(ptr);
-}
 
 int main()
 {
@@ -79,7 +53,5 @@ int main()
 
 	xdelete(knight);
 }
-
-
 
 
