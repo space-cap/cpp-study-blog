@@ -8,34 +8,73 @@
 #include <future>
 #include "ThreadManager.h"
 
+#include <vector>
+#include <thread>
 
-#include <iostream>
-#include <cmath>
+// 소수 구하기
+bool IsPrime(int number)
+{
+	if (number <= 1)
+		return false;
+	if (number == 2 || number == 3)
+		return true;
 
-bool isPrime(int number) {
-    if (number <= 1) return false; // 1 이하는 소수가 아님
-    if (number <= 3) return true;  // 2, 3은 소수임
+	for (int i = 2; i < number; i++)
+	{
+		if ((number % i) == 0)
+			return false;
+	}
 
-    if (number % 2 == 0 || number % 3 == 0) return false; // 2나 3으로 나눠지는 수는 소수가 아님
-
-    for (int i = 5; i * i <= number; i += 6) {
-        if (number % i == 0 || number % (i + 2) == 0) return false;
-    }
-
-    return true;
+	return true;
 }
 
-int main() {
-    int n;
-    std::cout << "Enter a number: ";
-    std::cin >> n;
+// [start ~ end]
+int CountPrime(int start, int end)
+{
+	int count = 0;
 
-    if (isPrime(n)) {
-        std::cout << n << " is a prime number." << std::endl;
-    }
-    else {
-        std::cout << n << " is not a prime number." << std::endl;
-    }
+	for (int number = start; number <= end; number++)
+	{
+		if (IsPrime(number))
+			count++;
+	}
 
-    return 0;
+	return count;
 }
+
+// 1과 자기 자신으로만 나뉘면 그것을 소수라고 함
+
+int main()
+{
+	const int MAX_NUMBER = 1'0000;
+	// 1~MAX_NUMBER까지의 소수 개수
+	vector<thread> threads;
+
+	// 1000 = 168
+	// 1'0000 = 1229
+	// 100'0000 = 78498
+
+	int coreCount = thread::hardware_concurrency();
+	int jobCount = (MAX_NUMBER / coreCount) + 1;
+
+	atomic<int> primeCount = 0;
+
+	for (int i = 0; i < coreCount; i++)
+	{
+		int start = (i * jobCount) + 1;
+		int end = min(MAX_NUMBER, ((i + 1) * jobCount));
+
+		threads.push_back(thread([start, end, &primeCount]()
+			{
+				primeCount += CountPrime(start, end);
+			}));
+	}
+
+	for (thread& t : threads)
+		t.join();
+
+	cout << primeCount << endl;
+
+	return 0;
+}
+
