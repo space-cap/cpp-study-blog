@@ -10,8 +10,18 @@
 
 #include "RefCounting.h"
 #include "Memory.h"
+#include "Allocator.h"
 
-class Knight
+
+
+class Player
+{
+public:
+	Player() {}
+	virtual ~Player() {}
+};
+
+class Knight : public Player
 {
 public:
 	Knight()
@@ -29,22 +39,11 @@ public:
 		cout << "~Knight()" << endl;
 	}
 
-	/*static void* operator new(size_t size)
-	{
-		cout << "Knight new! " << size << endl;
-		void* ptr = ::malloc(size);
-		return ptr;
-	}
-
-	static void operator delete(void* ptr)
-	{
-		cout << "Knight delete!" << endl;
-		::free(ptr);
-	}*/
-
 	int32 _hp = 100;
 	int32 _mp = 10;
 };
+
+
 
 
 int main()
