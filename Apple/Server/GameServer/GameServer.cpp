@@ -49,9 +49,10 @@ public:
 
 int main()
 {
-	Knight* knight = xnew<Knight>(100);
+	//Vector<Knight> v(100);
 
-	xdelete(knight);
+	Map<int32, Knight> m;
+	m[100] = Knight();
 }
 
 
