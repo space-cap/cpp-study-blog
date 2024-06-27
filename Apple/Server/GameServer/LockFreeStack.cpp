@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "LockFreeStack.h"
 
 /*
@@ -68,14 +68,14 @@ void PushEntrySList(SListHeader* header, SListEntry* entry)
 	SListHeader expected = {};
 	SListHeader desired = {};
 
-	// 16 ¹ÙÀÌÆ® Á¤·Ä
+	// 16 ë°”ì´íŠ¸ ì •ë ¬
 	desired.HeaderX64.next = (((uint64)entry) >> 4);
 
 	while (true)
 	{
 		expected = *header;
 
-		// ÀÌ »çÀÌ¿¡ º¯°æµÉ ¼ö ÀÖ´Ù
+		// ì´ ì‚¬ì´ì— ë³€ê²½ë  ìˆ˜ ìžˆë‹¤
 
 		entry->next = (SListEntry*)(((uint64)expected.HeaderX64.next) << 4);
 		desired.HeaderX64.depth = expected.HeaderX64.depth + 1;
