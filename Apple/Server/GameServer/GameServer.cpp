@@ -18,53 +18,71 @@
 #include <vector>
 #include <thread>
 
+#include <iostream>
+#include <vector>
 
-class Knight
-{
+// 풀에 사용할 객체 정의
+class PooledObject {
 public:
-	int32 _hp = rand() % 1000;
+    void reset() {
+        // 필요시 객체를 초기 상태로 재설정
+    }
+    void doSomething() {
+        std::cout << "Doing something with the pooled object." << std::endl;
+    }
+    // 다른 메서드와 멤버...
 };
 
-class Monster
-{
+// 객체 풀 클래스 정의
+class fObjectPool {
 public:
-	int64 _id = 0;
+    PooledObject* acquire() {
+        if (pool.empty()) {
+            // 사용 가능한 객체가 없으면 새 객체 생성
+            return new PooledObject();
+        }
+        else {
+            // 풀에서 객체를 가져옴
+            PooledObject* obj = pool.back();
+            pool.pop_back();
+            return obj;
+        }
+    }
+
+    void release(PooledObject* obj) {
+        obj->reset();  // 객체를 풀에 돌려놓기 전에 재설정
+        pool.push_back(obj);
+    }
+
+    ~fObjectPool() {
+        for (auto obj : pool) {
+            delete obj;
+        }
+    }
+
+private:
+    std::vector<PooledObject*> pool;
 };
 
-int main()
-{
-	Knight* knights[100];
+// 사용 예제
+int main() {
+    fObjectPool pool;
 
-	for (int32 i = 0; i < 100; i++)
-		knights[i] = ObjectPool<Knight>::Pop();
+    // 풀에서 객체를 가져옴
+    PooledObject* obj1 = pool.acquire();
+    obj1->doSomething();
 
-	for (int32 i = 0; i < 100; i++)
-	{
-		ObjectPool<Knight>::Push(knights[i]);
-		knights[i] = nullptr;
-	}
+    // 객체를 풀에 반환
+    pool.release(obj1);
 
-	shared_ptr<Knight> sptr = ObjectPool<Knight>::MakeShared();
-	shared_ptr<Knight> sptr2 = MakeShared<Knight>();
+    // 다른 객체를 가져옴 (풀에서 같은 객체를 재사용할 수 있음)
+    PooledObject* obj2 = pool.acquire();
+    obj2->doSomething();
 
-	for (int32 i = 0; i < 5; i++)
-	{
-		GThreadManager->Launch([]()
-			{
-				while (true)
-				{
-					Knight* knight = xnew<Knight>();
+    // 객체를 풀에 반환
+    pool.release(obj2);
 
-					cout << knight->_hp << endl;
-
-					this_thread::sleep_for(10ms);
-
-					xdelete(knight);
-				}
-			});
-	}
-
-	GThreadManager->Join();
+    return 0;
 }
 
 
