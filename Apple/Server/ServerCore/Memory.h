@@ -49,3 +49,11 @@ void xdelete(Type* obj)
 	xrelease(obj);
 }
 
+
+template<typename Type>
+shared_ptr<Type> MakeShared()
+{
+	return shared_ptr<Type>{ xnew<Type>(), xdelete<Type> };
+}
+
+
