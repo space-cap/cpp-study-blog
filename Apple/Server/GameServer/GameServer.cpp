@@ -22,72 +22,72 @@
 #pragma comment(lib, "ws2_32.lib")
 
 
-void HandleError(const char* cause)
-{
-	int32 errCode = ::WSAGetLastError();
-	cout << cause << " ErrorCode : " << errCode << endl;
+#include <iostream>
+#include <winsock2.h>
+#include <ws2tcpip.h>  // For inet_ntop
+
+#pragma comment(lib, "ws2_32.lib")
+
+const int PORT = 7777;
+
+int main() {
+    WSADATA wsaData;
+    SOCKET serverSocket;
+    sockaddr_in serverAddr, clientAddr;
+    int clientAddrSize = sizeof(clientAddr);
+    char buffer[1024];
+    char clientIP[INET_ADDRSTRLEN]; // For IPv4
+
+    // Initialize Winsock
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        std::cerr << "WSAStartup failed: " << WSAGetLastError() << std::endl;
+        return 1;
+    }
+
+    // Create a socket
+    serverSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (serverSocket == INVALID_SOCKET) {
+        std::cerr << "Socket creation failed: " << WSAGetLastError() << std::endl;
+        WSACleanup();
+        return 1;
+    }
+
+    // Setup the server address structure
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+    serverAddr.sin_port = htons(PORT);
+
+    // Bind the socket
+    if (::bind(serverSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+        std::cerr << "Bind failed: " << WSAGetLastError() << std::endl;
+        closesocket(serverSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    std::cout << "Server is running and waiting for messages..." << std::endl;
+
+    while (true) {
+        int receivedBytes = recvfrom(serverSocket, buffer, sizeof(buffer), 0, (sockaddr*)&clientAddr, &clientAddrSize);
+        if (receivedBytes == SOCKET_ERROR) {
+            std::cerr << "recvfrom failed: " << WSAGetLastError() << std::endl;
+            continue;
+        }
+
+        buffer[receivedBytes] = '\0';
+        inet_ntop(AF_INET, &clientAddr.sin_addr, clientIP, INET_ADDRSTRLEN);
+        std::cout << "Received: " << buffer << " from " << clientIP << ":" << ntohs(clientAddr.sin_port) << std::endl;
+
+        std::string reply = "Message received";
+        sendto(serverSocket, reply.c_str(), reply.size(), 0, (sockaddr*)&clientAddr, clientAddrSize);
+    }
+
+    // Cleanup
+    closesocket(serverSocket);
+    WSACleanup();
+
+    return 0;
 }
 
-int main()
-{
-	WSAData wsaData;
-	if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		return 0;
 
-	SOCKET serverSocket = ::socket(AF_INET, SOCK_DGRAM, 0);
-	if (serverSocket == INVALID_SOCKET)
-	{
-		HandleError("Socket");
-		return 0;
-	}
-
-	SOCKADDR_IN serverAddr;
-	::memset(&serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_addr.s_addr = ::htonl(INADDR_ANY);
-	serverAddr.sin_port = ::htons(7777);
-
-	if (::bind(serverSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-	{
-		HandleError("Bind");
-		return 0;
-	}
-
-	while (true)
-	{
-		SOCKADDR_IN clientAddr;
-		::memset(&clientAddr, 0, sizeof(clientAddr));
-		int32 addrLen = sizeof(clientAddr);
-
-		this_thread::sleep_for(1s);
-
-		char recvBuffer[1000];
-
-		int32 recvLen = ::recvfrom(serverSocket, recvBuffer, sizeof(recvBuffer), 0,
-			(SOCKADDR*)&clientAddr, &addrLen);
-
-		if (recvLen <= 0)
-		{
-			HandleError("RecvFrom");
-			return 0;
-		}
-
-		cout << "Recv Data! Data = " << recvBuffer << endl;
-		cout << "Recv Data! Len = " << recvLen << endl;
-
-		int32 errorCode = ::sendto(serverSocket, recvBuffer, recvLen, 0,
-			(SOCKADDR*)&clientAddr, sizeof(clientAddr));
-
-		if (errorCode == SOCKET_ERROR)
-		{
-			HandleError("SendTo");
-			return 0;
-		}
-
-		cout << "Send Data! Len = " << recvLen << endl;
-	}
-
-	// 윈속 종료
-	::WSACleanup();
-}
 
