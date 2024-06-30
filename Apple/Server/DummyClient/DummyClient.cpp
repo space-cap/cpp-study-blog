@@ -7,58 +7,74 @@
 #include <ws2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
 
-#include <iostream>
-#include <winsock2.h>
 
-#pragma comment(lib, "ws2_32.lib")
+// TCPClient.cpp
 
-const int PORT = 7777;
-const std::string HOST = "127.0.0.1";
 
 int main() {
     WSADATA wsaData;
     SOCKET clientSocket;
-    sockaddr_in serverAddr;
+    struct sockaddr_in serverAddr;
+    const char* message = "Hello, Server!";
     char buffer[1024];
+    int recvSize;
 
-    // Initialize Winsock
+    // Winsock 초기화
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         std::cerr << "WSAStartup failed: " << WSAGetLastError() << std::endl;
         return 1;
     }
 
-    // Create a socket
-    clientSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    // 소켓 생성
+    clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (clientSocket == INVALID_SOCKET) {
         std::cerr << "Socket creation failed: " << WSAGetLastError() << std::endl;
         WSACleanup();
         return 1;
     }
 
-    // Setup the server address structure
-    ::memset(&serverAddr, 0, sizeof(serverAddr));
+    // 서버 주소 구조체 설정
     serverAddr.sin_family = AF_INET;
     ::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
-    serverAddr.sin_port = htons(PORT);
+    serverAddr.sin_port = htons(54000);
 
-    std::string message = "Hello, UDP Server!";
-    sendto(clientSocket, message.c_str(), message.size(), 0, (sockaddr*)&serverAddr, sizeof(serverAddr));
+    // 서버에 연결
+    if (connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+        std::cerr << "Connect failed: " << WSAGetLastError() << std::endl;
+        closesocket(clientSocket);
+        WSACleanup();
+        return 1;
+    }
 
-    int serverAddrSize = sizeof(serverAddr);
-    int receivedBytes = recvfrom(clientSocket, buffer, sizeof(buffer), 0, (sockaddr*)&serverAddr, &serverAddrSize);
-    if (receivedBytes == SOCKET_ERROR) {
-        std::cerr << "recvfrom failed: " << WSAGetLastError() << std::endl;
+    std::cout << "Connected to server!" << std::endl;
+
+    // 데이터 전송
+    if (send(clientSocket, message, strlen(message), 0) == SOCKET_ERROR) {
+        std::cerr << "Send failed: " << WSAGetLastError() << std::endl;
+        closesocket(clientSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    // 데이터 수신 (옵션)
+    recvSize = recv(clientSocket, buffer, 1024, 0);
+    if (recvSize > 0) {
+        buffer[recvSize] = '\0';
+        std::cout << "Received: " << buffer << std::endl;
+    }
+    else if (recvSize == 0) {
+        std::cout << "Connection closed." << std::endl;
     }
     else {
-        buffer[receivedBytes] = '\0';
-        std::cout << "Reply: " << buffer << std::endl;
+        std::cerr << "Recv failed: " << WSAGetLastError() << std::endl;
     }
 
-    // Cleanup
+    // 소켓 닫기
     closesocket(clientSocket);
     WSACleanup();
-
     return 0;
 }
+
+
 
 
