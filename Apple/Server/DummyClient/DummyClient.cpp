@@ -14,7 +14,6 @@
 
 
 
-
 void HandleError(const char* cause)
 {
 	int32 errCode = ::WSAGetLastError();
@@ -99,5 +98,4 @@ int main()
 	// 윈속 종료
 	::WSACleanup();
 }
-
 
