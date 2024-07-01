@@ -22,6 +22,9 @@
 #pragma comment(lib, "ws2_32.lib")
 
 
+
+
+
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdio.h>
@@ -38,6 +41,7 @@ int main() {
     WSANETWORKEVENTS networkEvents;
     int addrlen, new_socket, i, eventIndex;
     char buffer[1024];
+    char clientIp[INET_ADDRSTRLEN];
     int valread;
 
     WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -50,7 +54,7 @@ int main() {
 
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons(12345);
+    server.sin_port = htons(777);
 
     if (::bind(listenSocket, (struct sockaddr*)&server, sizeof(server)) == SOCKET_ERROR) {
         printf("Bind failed. Error: %d\n", WSAGetLastError());
@@ -92,7 +96,9 @@ int main() {
                 printf("Accept failed. Error: %d\n", WSAGetLastError());
                 continue;
             }
-            printf("New connection. Socket FD: %d, IP: %s, Port: %d\n", new_socket, inet_ntoa(client.sin_addr), ntohs(client.sin_port));
+
+            inet_ntop(AF_INET, &(client.sin_addr), clientIp, INET_ADDRSTRLEN);
+            printf("New connection. Socket FD: %d, IP: %s, Port: %d\n", new_socket, clientIp, ntohs(client.sin_port));
 
             for (i = 0; i < MAX_CLIENTS; i++) {
                 if (clientSocket[i] == INVALID_SOCKET) {
@@ -131,6 +137,7 @@ int main() {
     WSACleanup();
     return 0;
 }
+
 
 
 
