@@ -23,111 +23,60 @@
 
 
 
+#include <winsock2.h>
+#include <iostream>
 
-void HandleError(const char* cause)
-{
-	int32 errCode = ::WSAGetLastError();
-	cout << cause << " ErrorCode : " << errCode << endl;
+int main() {
+    WSADATA wsaData;
+    SOCKET sock;
+    sockaddr_in server;
+    u_long mode = 1;
+
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
+
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    ioctlsocket(sock, FIONBIO, &mode); // Set non-blocking mode
+    ::inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
+    server.sin_family = AF_INET;
+    server.sin_port = htons(12345);
+
+    connect(sock, (struct sockaddr*)&server, sizeof(server));
+
+    char message[1000], server_reply[2000];
+    int message_len, reply_len;
+
+    while (true) {
+        std::cout << "Enter message: ";
+        std::cin.getline(message, sizeof(message));
+        message_len = strlen(message);
+
+        send(sock, message, message_len, 0);
+
+        while (true) {
+            reply_len = recv(sock, server_reply, sizeof(server_reply), 0);
+            if (reply_len > 0) {
+                server_reply[reply_len] = '\0';
+                std::cout << "Server reply: " << server_reply << std::endl;
+                break;
+            }
+            else if (reply_len == SOCKET_ERROR) {
+                if (WSAGetLastError() == WSAEWOULDBLOCK) {
+                    // No data available yet, continue processing other tasks
+                    Sleep(100); // Small delay to prevent busy-waiting
+                    continue;
+                }
+                else {
+                    std::cerr << "Recv failed: " << WSAGetLastError() << std::endl;
+                    break;
+                }
+            }
+        }
+    }
+
+    closesocket(sock);
+    WSACleanup();
+    return 0;
 }
 
-int main()
-{
-	WSAData wsaData;
-	if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		return 0;
-
-	// 블로킹(Blocking) 소켓
-	// accept -> 접속한 클라가 있을 때
-	// connect -> 서버 접속 성공했을 때
-	// send, sendto -> 요청한 데이터를 송신 버퍼에 복사했을 때
-	// recv, recvfrom -> 수신 버퍼에 도착한 데이터가 있고, 이를 유저레벨 버퍼에 복사했을 때
-
-	// 논블로킹(Non-Blocking)
-
-	SOCKET listenSocket = ::socket(AF_INET, SOCK_STREAM, 0);
-	if (listenSocket == INVALID_SOCKET)
-		return 0;
-
-	u_long on = 1;
-	if (::ioctlsocket(listenSocket, FIONBIO, &on) == INVALID_SOCKET)
-		return 0;
-
-	SOCKADDR_IN serverAddr;
-	::memset(&serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_addr.s_addr = ::htonl(INADDR_ANY);
-	serverAddr.sin_port = ::htons(7777);
-
-	if (::bind(listenSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-		return 0;
-
-	if (::listen(listenSocket, SOMAXCONN) == SOCKET_ERROR)
-		return 0;
-
-	cout << "Accept" << endl;
-
-	SOCKADDR_IN clientAddr;
-	int32 addrLen = sizeof(clientAddr);
-
-	// Accept
-	while (true)
-	{
-		SOCKET clientSocket = ::accept(listenSocket, (SOCKADDR*)&clientAddr, &addrLen);
-		if (clientSocket == INVALID_SOCKET)
-		{
-			// 원래 블록했어야 했는데... 너가 논블로킹으로 하라며?
-			if (::WSAGetLastError() == WSAEWOULDBLOCK)
-				continue;
-
-			// Error
-			break;
-		}
-
-		cout << "Client Connected!" << endl;
-
-		// Recv
-		while (true)
-		{
-			char recvBuffer[1000];
-			int32 recvLen = ::recv(clientSocket, recvBuffer, sizeof(recvBuffer), 0);
-			if (recvLen == SOCKET_ERROR)
-			{
-				// 원래 블록했어야 했는데... 너가 논블로킹으로 하라며?
-				if (::WSAGetLastError() == WSAEWOULDBLOCK)
-					continue;
-
-				// Error
-				break;
-			}
-			else if (recvLen == 0)
-			{
-				// 연결 끊김
-				break;
-			}
-
-			cout << "Recv Data Len = " << recvLen << endl;
-
-			// Send
-			while (true)
-			{
-				if (::send(clientSocket, recvBuffer, recvLen, 0) == SOCKET_ERROR)
-				{
-					// 원래 블록했어야 했는데... 너가 논블로킹으로 하라며?
-					if (::WSAGetLastError() == WSAEWOULDBLOCK)
-						continue;
-					// Error
-					break;
-				}
-
-				cout << "Send Data ! Len = " << recvLen << endl;
-				break;
-			}
-		}
-	}
-
-
-	// 윈속 종료
-	::WSACleanup();
-}
 
 
