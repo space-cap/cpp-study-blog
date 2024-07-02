@@ -35,7 +35,14 @@ bool SocketUtils::BindWindowsFunction(SOCKET socket, GUID guid, LPVOID* fn)
 
 SOCKET SocketUtils::CreateSocket()
 {
-	return ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+
+	SOCKET sock;
+
+	//sock = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+
+	sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+	return  sock;
 }
 
 bool SocketUtils::SetLinger(SOCKET socket, uint16 onoff, uint16 linger)
