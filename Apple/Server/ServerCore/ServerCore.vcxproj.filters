@@ -60,6 +60,10 @@
     <ClCompile Include="SocketUtils.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="IocpCore.cpp" />
+    <ClCompile Include="IocpEvent.cpp" />
+    <ClCompile Include="Session.cpp" />
+    <ClCompile Include="Listener.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -116,5 +120,9 @@
     <ClInclude Include="SocketUtils.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="IocpCore.h" />
+    <ClInclude Include="IocpEvent.h" />
+    <ClInclude Include="Session.h" />
+    <ClInclude Include="Listener.h" />
   </ItemGroup>
 </Project>
