@@ -49,7 +49,7 @@ bool Listener::StartAccept(NetAddress netAddress)
 		RegisterAccept(acceptEvent);
 	}
 
-	return false;
+	return true;
 }
 
 void Listener::CloseSocket()
