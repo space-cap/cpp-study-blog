@@ -56,9 +56,6 @@ Memory::~Memory()
 	_pools.clear();
 }
 
-
-
-
 void* Memory::Allocate(int32 size)
 {
 	MemoryHeader* header = nullptr;
@@ -104,4 +101,3 @@ void Memory::Release(void* ptr)
 	}
 #endif	
 }
-
