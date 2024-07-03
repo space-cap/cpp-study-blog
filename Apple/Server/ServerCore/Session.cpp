@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Session.h"
 #include "SocketUtils.h"
 #include "Service.h"
@@ -19,9 +19,9 @@ Session::~Session()
 
 void Session::Send(BYTE* buffer, int32 len)
 {
-	// »ı°¢ÇÒ ¹®Á¦
-	// 1) ¹öÆÛ °ü¸®?
-	// 2) sendEvent °ü¸®? ´ÜÀÏ? ¿©·¯°³? WSASend ÁßÃ¸?
+	// ìƒê°í•  ë¬¸ì œ
+	// 1) ë²„í¼ ê´€ë¦¬?
+	// 2) sendEvent ê´€ë¦¬? ë‹¨ì¼? ì—¬ëŸ¬ê°œ? WSASend ì¤‘ì²©?
 
 	// TEMP
 	SendEvent* sendEvent = xnew<SendEvent>();
@@ -46,7 +46,7 @@ void Session::Disconnect(const WCHAR* cause)
 	// TEMP
 	wcout << "Disconnect : " << cause << endl;
 
-	OnDisconnected(); // ÄÁÅÙÃ÷ ÄÚµå¿¡¼­ ÀçÁ¤ÀÇ
+	OnDisconnected(); // ì»¨í…ì¸  ì½”ë“œì—ì„œ ì¬ì •ì˜
 	GetService()->ReleaseSession(GetSessionRef());
 
 	RegisterDisconnect();
@@ -89,7 +89,7 @@ bool Session::RegisterConnect()
 	if (SocketUtils::SetReuseAddress(_socket, true) == false)
 		return false;
 
-	if (SocketUtils::BindAnyAddress(_socket, 0/*³²´Â°Å*/) == false)
+	if (SocketUtils::BindAnyAddress(_socket, 0/*ë‚¨ëŠ”ê±°*/) == false)
 		return false;
 
 	_connectEvent.Init();
@@ -181,13 +181,13 @@ void Session::ProcessConnect()
 
 	_connected.store(true);
 
-	// ¼¼¼Ç µî·Ï
+	// ì„¸ì…˜ ë“±ë¡
 	GetService()->AddSession(GetSessionRef());
 
-	// ÄÁÅÙÃ÷ ÄÚµå¿¡¼­ ÀçÁ¤ÀÇ
+	// ì»¨í…ì¸  ì½”ë“œì—ì„œ ì¬ì •ì˜
 	OnConnected();
 
-	// ¼ö½Å µî·Ï
+	// ìˆ˜ì‹  ë“±ë¡
 	RegisterRecv();
 }
 
@@ -213,17 +213,17 @@ void Session::ProcessRecv(int32 numOfBytes)
 	}
 
 	int32 dataSize = _recvBuffer.DataSize();
-	int32 processLen = OnRecv(_recvBuffer.ReadPos(), dataSize); // ÄÁÅÙÃ÷ ÄÚµå¿¡¼­ ÀçÁ¤ÀÇ
+	int32 processLen = OnRecv(_recvBuffer.ReadPos(), dataSize); // ì»¨í…ì¸  ì½”ë“œì—ì„œ ì¬ì •ì˜
 	if (processLen < 0 || dataSize < processLen || _recvBuffer.OnRead(processLen) == false)
 	{
 		Disconnect(L"OnRead Overflow");
 		return;
 	}
 	
-	// Ä¿¼­ Á¤¸®
+	// ì»¤ì„œ ì •ë¦¬
 	_recvBuffer.Clean();
 
-	// ¼ö½Å µî·Ï
+	// ìˆ˜ì‹  ë“±ë¡
 	RegisterRecv();
 }
 
@@ -238,7 +238,7 @@ void Session::ProcessSend(SendEvent* sendEvent, int32 numOfBytes)
 		return;
 	}
 
-	// ÄÁÅÙÃ÷ ÄÚµå¿¡¼­ ÀçÁ¤ÀÇ
+	// ì»¨í…ì¸  ì½”ë“œì—ì„œ ì¬ì •ì˜
 	OnSend(numOfBytes);
 }
 
