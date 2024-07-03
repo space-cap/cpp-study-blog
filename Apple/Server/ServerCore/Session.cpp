@@ -1,4 +1,4 @@
-ï»¿#include "pch.h"
+#include "pch.h"
 #include "Session.h"
 #include "SocketUtils.h"
 #include "Service.h"
@@ -7,7 +7,7 @@
 	Session
 ---------------*/
 
-Session::Session()
+Session::Session() : _recvBuffer(BUFFER_SIZE)
 {
 	_socket = SocketUtils::CreateSocket();
 }
@@ -19,9 +19,9 @@ Session::~Session()
 
 void Session::Send(BYTE* buffer, int32 len)
 {
-	// ìƒê°í•  ë¬¸ì œ
-	// 1) ë²„í¼ ê´€ë¦¬?
-	// 2) sendEvent ê´€ë¦¬? ë‹¨ì¼? ì—¬ëŸ¬ê°œ? WSASend ì¤‘ì²©?
+	// »ı°¢ÇÒ ¹®Á¦
+	// 1) ¹öÆÛ °ü¸®?
+	// 2) sendEvent °ü¸®? ´ÜÀÏ? ¿©·¯°³? WSASend ÁßÃ¸?
 
 	// TEMP
 	SendEvent* sendEvent = xnew<SendEvent>();
@@ -46,7 +46,7 @@ void Session::Disconnect(const WCHAR* cause)
 	// TEMP
 	wcout << "Disconnect : " << cause << endl;
 
-	OnDisconnected(); // ì»¨í…ì¸  ì½”ë“œì—ì„œ ì¬ì •ì˜
+	OnDisconnected(); // ÄÁÅÙÃ÷ ÄÚµå¿¡¼­ ÀçÁ¤ÀÇ
 	GetService()->ReleaseSession(GetSessionRef());
 
 	RegisterDisconnect();
@@ -89,7 +89,7 @@ bool Session::RegisterConnect()
 	if (SocketUtils::SetReuseAddress(_socket, true) == false)
 		return false;
 
-	if (SocketUtils::BindAnyAddress(_socket, 0/*ë‚¨ëŠ”ê±°*/) == false)
+	if (SocketUtils::BindAnyAddress(_socket, 0/*³²´Â°Å*/) == false)
 		return false;
 
 	_connectEvent.Init();
@@ -137,12 +137,12 @@ void Session::RegisterRecv()
 	_recvEvent.owner = shared_from_this(); // ADD_REF
 
 	WSABUF wsaBuf;
-	wsaBuf.buf = reinterpret_cast<char*>(_recvBuffer);
-	wsaBuf.len = len32(_recvBuffer);
+	wsaBuf.buf = reinterpret_cast<char*>(_recvBuffer.WritePos());
+	wsaBuf.len = _recvBuffer.FreeSize();
 
 	DWORD numOfBytes = 0;
 	DWORD flags = 0;
-	if (SOCKET_ERROR == ::WSARecv(_socket, &wsaBuf, 1, OUT & numOfBytes, OUT & flags, &_recvEvent, nullptr))
+	if (SOCKET_ERROR == ::WSARecv(_socket, &wsaBuf, 1, OUT &numOfBytes, OUT &flags, &_recvEvent, nullptr))
 	{
 		int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING)
@@ -163,7 +163,7 @@ void Session::RegisterSend(SendEvent* sendEvent)
 	wsaBuf.len = (ULONG)sendEvent->buffer.size();
 
 	DWORD numOfBytes = 0;
-	if (SOCKET_ERROR == ::WSASend(_socket, &wsaBuf, 1, OUT & numOfBytes, 0, sendEvent, nullptr))
+	if (SOCKET_ERROR == ::WSASend(_socket, &wsaBuf, 1, OUT &numOfBytes, 0, sendEvent, nullptr))
 	{
 		int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING)
@@ -181,13 +181,13 @@ void Session::ProcessConnect()
 
 	_connected.store(true);
 
-	// ì„¸ì…˜ ë“±ë¡
+	// ¼¼¼Ç µî·Ï
 	GetService()->AddSession(GetSessionRef());
 
-	// ì»¨í…ì¸  ì½”ë“œì—ì„œ ì¬ì •ì˜
+	// ÄÁÅÙÃ÷ ÄÚµå¿¡¼­ ÀçÁ¤ÀÇ
 	OnConnected();
 
-	// ìˆ˜ì‹  ë“±ë¡
+	// ¼ö½Å µî·Ï
 	RegisterRecv();
 }
 
@@ -206,10 +206,24 @@ void Session::ProcessRecv(int32 numOfBytes)
 		return;
 	}
 
-	// ì»¨í…ì¸  ì½”ë“œì—ì„œ ì¬ì •ì˜
-	OnRecv(_recvBuffer, numOfBytes);
+	if (_recvBuffer.OnWrite(numOfBytes) == false)
+	{
+		Disconnect(L"OnWrite Overflow");
+		return;
+	}
 
-	// ìˆ˜ì‹  ë“±ë¡
+	int32 dataSize = _recvBuffer.DataSize();
+	int32 processLen = OnRecv(_recvBuffer.ReadPos(), dataSize); // ÄÁÅÙÃ÷ ÄÚµå¿¡¼­ ÀçÁ¤ÀÇ
+	if (processLen < 0 || dataSize < processLen || _recvBuffer.OnRead(processLen) == false)
+	{
+		Disconnect(L"OnRead Overflow");
+		return;
+	}
+	
+	// Ä¿¼­ Á¤¸®
+	_recvBuffer.Clean();
+
+	// ¼ö½Å µî·Ï
 	RegisterRecv();
 }
 
@@ -224,7 +238,7 @@ void Session::ProcessSend(SendEvent* sendEvent, int32 numOfBytes)
 		return;
 	}
 
-	// ì»¨í…ì¸  ì½”ë“œì—ì„œ ì¬ì •ì˜
+	// ÄÁÅÙÃ÷ ÄÚµå¿¡¼­ ÀçÁ¤ÀÇ
 	OnSend(numOfBytes);
 }
 
