@@ -1,20 +1,16 @@
 ﻿#include "pch.h"
-#include <iostream>
-#include "CorePch.h"
-#include <atomic>
-#include <mutex>
-#include <windows.h>
-#include <future>
 #include "ThreadManager.h"
-
 #include "Service.h"
 #include "Session.h"
-
-
 
 class GameSession : public Session
 {
 public:
+	~GameSession()
+	{
+		cout << "~GameSession" << endl;
+	}
+
 	virtual int32 OnRecv(BYTE* buffer, int32 len) override
 	{
 		// Echo
@@ -52,5 +48,3 @@ int main()
 
 	GThreadManager->Join();
 }
-
-
