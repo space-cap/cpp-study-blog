@@ -51,9 +51,21 @@ int main() {
     std::cout << "Client connected." << std::endl;
 
     char recvBuf[512];
-    int bytesReceived = recv(clientSocket, recvBuf, 512, 0);
-    if (bytesReceived > 0) {
-        std::cout << "Received data: " << std::string(recvBuf, 0, bytesReceived) << std::endl;
+    int bytesReceived;
+
+    while (true) {
+        bytesReceived = recv(clientSocket, recvBuf, 512, 0);
+        if (bytesReceived > 0) {
+            std::cout << "Received data: " << std::string(recvBuf, 0, bytesReceived) << std::endl;
+        }
+        else if (bytesReceived == 0) {
+            std::cout << "Connection closed." << std::endl;
+            break;
+        }
+        else {
+            std::cerr << "recv failed with error: " << WSAGetLastError() << std::endl;
+            break;
+        }
     }
 
     closesocket(clientSocket);

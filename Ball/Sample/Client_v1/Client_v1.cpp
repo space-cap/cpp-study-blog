@@ -3,6 +3,7 @@
 #include <WinSock2.h>
 #include <Mswsock.h>
 #include <iostream>
+#include <thread>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -44,17 +45,22 @@ int main() {
     DWORD bytesSent = 0;
     WSAOVERLAPPED overlapped = { 0 };
 
-    if (WSASend(s, &wsaBuf, 1, &bytesSent, 0, &overlapped, CompletionRoutine) == SOCKET_ERROR) {
-        if (WSAGetLastError() != WSA_IO_PENDING) {
-            std::cerr << "WSASend failed with error: " << WSAGetLastError() << std::endl;
-            closesocket(s);
-            WSACleanup();
-            return 1;
+    while (true) {
+        if (WSASend(s, &wsaBuf, 1, &bytesSent, 0, &overlapped, CompletionRoutine) == SOCKET_ERROR) {
+            if (WSAGetLastError() != WSA_IO_PENDING) {
+                std::cerr << "WSASend failed with error: " << WSAGetLastError() << std::endl;
+                closesocket(s);
+                WSACleanup();
+                return 1;
+            }
         }
-    }
 
-    // 비동기 작업이 완료될 때까지 대기
-    SleepEx(INFINITE, TRUE);
+        // 비동기 작업이 완료될 때까지 대기
+        SleepEx(INFINITE, TRUE);
+
+        // 1초 대기
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
 
     closesocket(s);
     WSACleanup();
