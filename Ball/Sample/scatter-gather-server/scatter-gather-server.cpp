@@ -4,7 +4,6 @@
 #include <iostream>
 
 #pragma comment(lib, "Ws2_32.lib")
-
 int main() {
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
@@ -50,20 +49,21 @@ int main() {
 
     std::cout << "Client connected." << std::endl;
 
-    char recvBuf1[256];
-    char recvBuf2[256];
+    char recvBuf1[256]{};
+    char recvBuf2[256]{};
     WSABUF wsaBuf[2];
     wsaBuf[0].buf = recvBuf1;
     wsaBuf[0].len = sizeof(recvBuf1);
     wsaBuf[1].buf = recvBuf2;
     wsaBuf[1].len = sizeof(recvBuf2);
 
-    DWORD bytesReceived;
+    DWORD bytesReceived = 0;
     WSAOVERLAPPED overlapped = { 0 };
 
     if (WSARecv(clientSocket, wsaBuf, 2, &bytesReceived, 0, &overlapped, NULL) == SOCKET_ERROR) {
-        if (WSAGetLastError() != WSA_IO_PENDING) {
-            std::cerr << "WSARecv failed with error: " << WSAGetLastError() << std::endl;
+        int error = WSAGetLastError();
+        if (error != WSA_IO_PENDING) {
+            std::cerr << "WSARecv failed with error: " << error << std::endl;
             closesocket(clientSocket);
             closesocket(listeningSocket);
             WSACleanup();
@@ -83,3 +83,4 @@ int main() {
 
     return 0;
 }
+
