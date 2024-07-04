@@ -1,21 +1,16 @@
-// string::data
 #include <iostream>
-#include <string>
 #include <cstring>
 
-int main()
-{
-    int length;
+int main() {
+    char source[] = "Hello, World!";
+    char destination[20];  // 충분히 큰 배열을 준비
 
-    std::string str = "Test string";
-    const char* cstr = "Test string";
+    // 메모리 복사
+    memcpy(destination, source, strlen(source) + 1);  // 널 종결 문자 포함
 
-    if (str.length() == std::strlen(cstr))
-    {
-        std::cout << "str and cstr have the same length.\n";
+    // 출력
+    std::cout << "Source: " << source << std::endl;
+    std::cout << "Destination: " << destination << std::endl;
 
-        if (memcmp(cstr, str.data(), str.length()) == 0)
-            std::cout << "str and cstr have the same content.\n";
-    }
     return 0;
 }
