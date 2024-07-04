@@ -21,9 +21,9 @@ int main()
 				while (true)
 				{
 					service->GetIocpCore()->Dispatch();
-				}
+				}				
 			});
-	}
+	}	
 
 	GThreadManager->Join();
 }
