@@ -1,15 +1,21 @@
+// string::data
 #include <iostream>
 #include <string>
+#include <cstring>
 
-int main() {
-    std::wstring wideStr = L"Hello, 세계!";
+int main()
+{
+    int length;
 
-    // wstring.data() 사용하여 내부 데이터 접근
-    const wchar_t* data = wideStr.data();
+    std::string str = "Test string";
+    const char* cstr = "Test string";
 
-    // 출력
-    std::wcout << L"wstring: " << wideStr << std::endl;
-    std::wcout << L"data(): " << data << std::endl;
+    if (str.length() == std::strlen(cstr))
+    {
+        std::cout << "str and cstr have the same length.\n";
 
+        if (memcmp(cstr, str.data(), str.length()) == 0)
+            std::cout << "str and cstr have the same content.\n";
+    }
     return 0;
 }
