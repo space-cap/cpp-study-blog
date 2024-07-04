@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scatter-gather-server", "sc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scatter-gather-client", "scatter-gather-client\scatter-gather-client.vcxproj", "{337ACEA4-0ECB-4DED-BF35-2D8D2168B675}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApplication2", "ConsoleApplication2\ConsoleApplication2.vcxproj", "{6989455F-64E9-4101-9D64-CEC5F48CB65C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{337ACEA4-0ECB-4DED-BF35-2D8D2168B675}.Release|x64.Build.0 = Release|x64
 		{337ACEA4-0ECB-4DED-BF35-2D8D2168B675}.Release|x86.ActiveCfg = Release|Win32
 		{337ACEA4-0ECB-4DED-BF35-2D8D2168B675}.Release|x86.Build.0 = Release|Win32
+		{6989455F-64E9-4101-9D64-CEC5F48CB65C}.Debug|x64.ActiveCfg = Debug|x64
+		{6989455F-64E9-4101-9D64-CEC5F48CB65C}.Debug|x64.Build.0 = Debug|x64
+		{6989455F-64E9-4101-9D64-CEC5F48CB65C}.Debug|x86.ActiveCfg = Debug|Win32
+		{6989455F-64E9-4101-9D64-CEC5F48CB65C}.Debug|x86.Build.0 = Debug|Win32
+		{6989455F-64E9-4101-9D64-CEC5F48CB65C}.Release|x64.ActiveCfg = Release|x64
+		{6989455F-64E9-4101-9D64-CEC5F48CB65C}.Release|x64.Build.0 = Release|x64
+		{6989455F-64E9-4101-9D64-CEC5F48CB65C}.Release|x86.ActiveCfg = Release|Win32
+		{6989455F-64E9-4101-9D64-CEC5F48CB65C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
