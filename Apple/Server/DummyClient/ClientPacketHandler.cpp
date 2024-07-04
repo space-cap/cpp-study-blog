@@ -80,7 +80,7 @@ void ClientPacketHandler::Handle_S_TEST(BYTE* buffer, int32 len)
 	//cout << "ID: " << id << " HP : " << hp << " ATT : " << attack << endl;
 
 	PKT_S_TEST::BuffsList buffs = pkt->GetBuffsList();
-
+	
 	cout << "BufCount : " << buffs.Count() << endl;
 	for (int32 i = 0; i < buffs.Count(); i++)
 	{
