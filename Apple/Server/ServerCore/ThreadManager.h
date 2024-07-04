@@ -24,4 +24,3 @@ private:
 	vector<thread>	_threads;
 };
 
-

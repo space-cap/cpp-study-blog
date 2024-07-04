@@ -2,7 +2,6 @@
 #include "Allocator.h"
 #include "Memory.h"
 
-
 /*-------------------
 	BaseAllocator
 -------------------*/
@@ -16,7 +15,6 @@ void BaseAllocator::Release(void* ptr)
 {
 	::free(ptr);
 }
-
 
 /*-------------------
 	StompAllocator
@@ -37,7 +35,6 @@ void StompAllocator::Release(void* ptr)
 	::VirtualFree(reinterpret_cast<void*>(baseAddress), 0, MEM_RELEASE);
 }
 
-
 /*-------------------
 	PoolAllocator
 -------------------*/
@@ -51,5 +48,3 @@ void PoolAllocator::Release(void* ptr)
 {
 	GMemory->Release(ptr);
 }
-
-

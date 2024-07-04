@@ -1,6 +1,7 @@
 #pragma once
 #include "Types.h"
 #include "Allocator.h"
+#include <array>
 #include <vector>
 #include <list>
 #include <queue>
@@ -10,6 +11,9 @@
 #include <unordered_map>
 #include <unordered_set>
 using namespace std;
+
+template<typename Type, uint32 Size>
+using Array = array<Type, Size>;
 
 template<typename Type>
 using Vector = vector<Type, StlAllocator<Type>>;
@@ -44,4 +48,3 @@ using HashMap = unordered_map<Key, Type, Hasher, KeyEq, StlAllocator<pair<const 
 
 template<typename Key, typename Hasher = hash<Key>, typename KeyEq = equal_to<Key>>
 using HashSet = unordered_set<Key, Hasher, KeyEq, StlAllocator<Key>>;
-

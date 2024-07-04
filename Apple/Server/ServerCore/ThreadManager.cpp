@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "ThreadManager.h"
-
 #include "CoreTLS.h"
 #include "CoreGlobal.h"
 
@@ -51,4 +50,3 @@ void ThreadManager::DestroyTLS()
 {
 
 }
-

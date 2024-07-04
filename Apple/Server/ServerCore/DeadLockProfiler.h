@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include <stack>
 #include <map>
 #include <vector>
@@ -20,15 +20,14 @@ private:
 private:
 	unordered_map<const char*, int32>	_nameToId;
 	unordered_map<int32, const char*>	_idToName;
-	stack<int32>						_lockStack;
 	map<int32, set<int32>>				_lockHistory;
 
 	Mutex _lock;
 
 private:
-	vector<int32>	_discoveredOrder; // ë…¸ë“œê°€ ë°œê²¬ëœ ìˆœì„œë¥¼ ê¸°ë¡í•˜ëŠ” ë°°ì—´
-	int32			_discoveredCount = 0; // ë…¸ë“œê°€ ë°œê²¬ëœ ìˆœì„œ
-	vector<bool>	_finished; // Dfs(i)ê°€ ì¢…ë£Œ ë˜ì—ˆëŠ”ì§€ ì—¬ë¶€
+	vector<int32>	_discoveredOrder; // ³ëµå°¡ ¹ß°ßµÈ ¼ø¼­¸¦ ±â·ÏÇÏ´Â ¹è¿­
+	int32			_discoveredCount = 0; // ³ëµå°¡ ¹ß°ßµÈ ¼ø¼­
+	vector<bool>	_finished; // Dfs(i)°¡ Á¾·á µÇ¾ú´ÂÁö ¿©ºÎ
 	vector<int32>	_parent;
 };
 

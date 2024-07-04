@@ -215,4 +215,3 @@ bool CanCast(shared_ptr<From> ptr)
 
 #define DECLARE_TL		using TL = TL; int32 _typeId;
 #define INIT_TL(Type)	_typeId = IndexOf<TL, Type>::value;
-
