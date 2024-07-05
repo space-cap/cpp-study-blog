@@ -215,11 +215,6 @@
     <None Include="..\Common\protoc-21.12\bin\Protocol.proto" />
     <None Include="..\Common\protoc-21.12\bin\Struct.proto" />
   </ItemGroup>
-  <ItemGroup>
-    <UpToDateCheckInput Include="..\Common\protoc-21.12\bin\Enum.proto" />
-    <UpToDateCheckInput Include="..\Common\protoc-21.12\bin\Protocol.proto" />
-    <UpToDateCheckInput Include="..\Common\protoc-21.12\bin\Struct.proto" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
