@@ -183,6 +183,12 @@
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="ServerPacketHandler.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Common\protoc-21.12\bin\Enum.proto" />
+    <None Include="..\Common\protoc-21.12\bin\GenPackets.bat" />
+    <None Include="..\Common\protoc-21.12\bin\Protocol.proto" />
+    <None Include="..\Common\protoc-21.12\bin\Struct.proto" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
