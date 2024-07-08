@@ -13,17 +13,17 @@ def main():
 
 	parser = ProtoParser.ProtoParser(1000, args.recv, args.send)
 	parser.parse_proto(args.path)
-	# file_loader = jinja2.FileSystemLoader('Templates')
-	# env = jinja2.Environment(loader=file_loader)
+	file_loader = jinja2.FileSystemLoader('Templates')
+	env = jinja2.Environment(loader=file_loader)
 
-	# template = env.get_template('PacketHandler.h')
-	# output = template.render(parser=parser, output=args.output)
+	template = env.get_template('PacketHandler.h')
+	output = template.render(parser=parser, output=args.output)
 
-	# f = open(args.output+'.h', 'w+')
-	# f.write(output)
-	# f.close()
+	f = open(args.output+'.h', 'w+')
+	f.write(output)
+	f.close()
 
-	# print(output)
+	print(output)
 	return
 
 if __name__ == '__main__':
