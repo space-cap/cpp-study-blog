@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "ClientPacketHandler.h"
+#include "ServerPacketHandler.h"
 #include "BufferReader.h"
 #include "Protocol.pb.h"
 
@@ -33,3 +33,10 @@ bool Handle_S_TEST(PacketSessionRef& session, Protocol::S_TEST& pkt)
 
 	return true;
 }
+
+
+bool Handle_S_LOGIN(PacketSessionRef& session, Protocol::S_LOGIN& pkt)
+{
+	return false;
+}
+
