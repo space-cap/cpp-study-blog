@@ -50,3 +50,4 @@ Ball/Sample/Server_v1/.editorconfig.bak
 Ball/Sample/x64/Debug/ConsoleApplication1.pdb
 /Apple/Server/Tools/PacketGenerator/env
 /Apple/Server/Tools/PacketGenerator/__pycache__
+/Apple/Server/Libraries/Libs/ServerCore/Debug
