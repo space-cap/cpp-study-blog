@@ -99,6 +99,7 @@
     <ClCompile Include="LockQueue.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="GlobalQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -191,5 +192,6 @@
     <ClInclude Include="LockQueue.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="GlobalQueue.h" />
   </ItemGroup>
 </Project>
