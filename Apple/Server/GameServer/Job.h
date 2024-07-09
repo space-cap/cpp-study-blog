@@ -3,6 +3,7 @@
 class IJob
 {
 public:
+	virtual ~IJob() = default;
 	virtual void Execute() { }
 };
 
