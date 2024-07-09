@@ -102,6 +102,7 @@
     <ClCompile Include="GlobalQueue.cpp">
       <Filter>Job</Filter>
     </ClCompile>
+    <ClCompile Include="JobTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -197,5 +198,6 @@
     <ClInclude Include="GlobalQueue.h">
       <Filter>Job</Filter>
     </ClInclude>
+    <ClInclude Include="JobTimer.h" />
   </ItemGroup>
 </Project>
