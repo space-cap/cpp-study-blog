@@ -25,6 +25,9 @@
     <Filter Include="XML">
       <UniqueIdentifier>{518b4fa1-a11c-42d6-8dac-de30ce509cc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Log">
+      <UniqueIdentifier>{4c8dbda5-4446-4f8c-af89-26a6dbe6df30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">
@@ -126,8 +129,15 @@
     <ClCompile Include="FileUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="DBSynchronizer.cpp" />
-    <ClCompile Include="DBModel.cpp" />
+    <ClCompile Include="DBModel.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="DBSynchronizer.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleLog.cpp">
+      <Filter>Log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -253,7 +263,14 @@
     <ClInclude Include="rapidxml_utils.hpp">
       <Filter>XML</Filter>
     </ClInclude>
-    <ClInclude Include="DBSynchronizer.h" />
-    <ClInclude Include="DBModel.h" />
+    <ClInclude Include="DBModel.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DBSynchronizer.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleLog.h">
+      <Filter>Log</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
