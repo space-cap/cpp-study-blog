@@ -5,6 +5,8 @@
 		<Column name="gold" type="int" notnull="false" />
 		<Column name="name" type="nvarchar(50)" notnull="false" />
 		<Column name="createDate" type="datetime" notnull="false" />
+		<Column name="lee2" type="int" notnull="false" />
+		<Column name="kim" type="int" notnull="false" />
 		<Index type="clustered">
 			<PrimaryKey/>
 			<Column name="id" />
