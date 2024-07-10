@@ -233,6 +233,7 @@ CALL $(SolutionDir)Common\Procedures\GenProcs.bat
     <UpToDateCheckInput Include="..\Common\protoc-21.12\bin\Enum.proto" />
     <UpToDateCheckInput Include="..\Common\protoc-21.12\bin\Protocol.proto" />
     <UpToDateCheckInput Include="..\Common\protoc-21.12\bin\Struct.proto" />
+	<UpToDateCheckInput Include="GameDB.xml" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="GameDB.xml" />
