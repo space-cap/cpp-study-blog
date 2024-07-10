@@ -22,6 +22,9 @@
     <Filter Include="DB">
       <UniqueIdentifier>{438a5140-293c-4b1d-ba7f-6f7c87fc8db4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{518b4fa1-a11c-42d6-8dac-de30ce509cc7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">
@@ -117,6 +120,10 @@
     <ClCompile Include="DBBind.cpp">
       <Filter>DB</Filter>
     </ClCompile>
+    <ClCompile Include="XmlParser.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -224,5 +231,9 @@
     <ClInclude Include="DBBind.h">
       <Filter>DB</Filter>
     </ClInclude>
+    <ClInclude Include="XmlParser.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtils.h" />
   </ItemGroup>
 </Project>
