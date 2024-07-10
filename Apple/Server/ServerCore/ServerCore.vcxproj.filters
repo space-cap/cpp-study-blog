@@ -126,6 +126,8 @@
     <ClCompile Include="FileUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="DBSynchronizer.cpp" />
+    <ClCompile Include="DBModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -251,5 +253,7 @@
     <ClInclude Include="rapidxml_utils.hpp">
       <Filter>XML</Filter>
     </ClInclude>
+    <ClInclude Include="DBSynchronizer.h" />
+    <ClInclude Include="DBModel.h" />
   </ItemGroup>
 </Project>
