@@ -6,6 +6,9 @@
 
 #define MAX_LOADSTRING 100
 
+int mousePosX;
+int mousePosY;
+
 // Global Variables:
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
@@ -15,7 +18,6 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -123,9 +125,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // Parse the menu selections:
             switch (wmId)
             {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
             case IDM_EXIT:
                 DestroyWindow(hWnd);
                 break;
@@ -140,7 +139,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HDC hdc = BeginPaint(hWnd, &ps);
 
             // 문자
-            ::TextOutW(hdc, 100, 100, L"hello world...", 14);
+            WCHAR buffer[100];
+            ::wsprintf(buffer, L"(%d, %d)", mousePosX, mousePosY);
+            ::TextOut(hdc, 100, 100, buffer, ::wcslen(buffer));
 
             // 사각형 
             ::Rectangle(hdc, 200, 200, 400, 400);
@@ -156,6 +157,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             EndPaint(hWnd, &ps);
         }
         break;
+    case WM_MOUSEMOVE:
+
+        mousePosX = LOWORD(lParam);
+        mousePosY = HIWORD(lParam);
+        ::InvalidateRect(hWnd, nullptr, TRUE); // 다시 그려줘.
+
+        break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
@@ -165,22 +173,3 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// Message handler for about box.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    UNREFERENCED_PARAMETER(lParam);
-    switch (message)
-    {
-    case WM_INITDIALOG:
-        return (INT_PTR)TRUE;
-
-    case WM_COMMAND:
-        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-        {
-            EndDialog(hDlg, LOWORD(wParam));
-            return (INT_PTR)TRUE;
-        }
-        break;
-    }
-    return (INT_PTR)FALSE;
-}
