@@ -142,6 +142,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // 문자
             ::TextOutW(hdc, 100, 100, L"hello world...", 14);
 
+            // 사각형 
+            ::Rectangle(hdc, 200, 200, 400, 400);
+
+            // 원
+            ::Ellipse(hdc, 200, 200, 400, 400);
+
+            // 선
+            ::MoveToEx(hdc, 300, 300, nullptr);
+            ::LineTo(hdc, 400, 400);
+            ::LineTo(hdc, 500, 300);
+
             EndPaint(hWnd, &ps);
         }
         break;
