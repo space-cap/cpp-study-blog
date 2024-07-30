@@ -5,33 +5,42 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\00. MainGame">
+      <UniqueIdentifier>{3a4682f0-edfd-4722-b545-2893ecfb970d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\01. Manager">
+      <UniqueIdentifier>{289dcd3a-5a2b-4e5e-840f-bb8c78d53b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02. Scene">
+      <UniqueIdentifier>{92b7b21d-5fa5-467c-930d-9ba51adb06ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\03. Objects">
+      <UniqueIdentifier>{a01aaccc-6691-4e0e-b5c1-1c25c9d53092}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\04. Resources">
+      <UniqueIdentifier>{e8a23518-3d01-4a66-93dd-8f3cde66a337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\99. Headers">
+      <UniqueIdentifier>{fdb63186-6df3-40b7-8ae3-fef372a7ad2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\99. Headers</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\99. Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files\99. Headers</Filter>
     </ClInclude>
     <ClInclude Include="GameCoding.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\00. MainGame</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="GameCoding.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCoding.rc">
@@ -45,5 +54,10 @@
     <Image Include="GameCoding.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameCoding.cpp">
+      <Filter>Source Files\00. MainGame</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
