@@ -36,11 +36,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MSG msg;
 
     // 3. Main message loop:
+    // 입력
+    // 로직
+    // 렌더링
+
     while (::GetMessage(&msg, nullptr, 0, 0))
     {
         ::TranslateMessage(&msg);
         ::DispatchMessage(&msg);
-
     }
 
     return (int) msg.wParam;
@@ -138,31 +141,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
 
-            // 문자
-            WCHAR buffer[100];
-            ::wsprintf(buffer, L"(%d, %d)", mousePosX, mousePosY);
-            ::TextOut(hdc, 100, 100, buffer, ::wcslen(buffer));
-
-            // 사각형 
-            ::Rectangle(hdc, 200, 200, 400, 400);
-
-            // 원
-            ::Ellipse(hdc, 200, 200, 400, 400);
-
-            // 선
-            ::MoveToEx(hdc, 300, 300, nullptr);
-            ::LineTo(hdc, 400, 400);
-            ::LineTo(hdc, 500, 300);
-
             EndPaint(hWnd, &ps);
         }
-        break;
-    case WM_MOUSEMOVE:
-
-        mousePosX = LOWORD(lParam);
-        mousePosY = HIWORD(lParam);
-        ::InvalidateRect(hWnd, nullptr, TRUE); // 다시 그려줘.
-
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
