@@ -138,7 +138,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
+
+            // ¹®ÀÚ
+            ::TextOutW(hdc, 100, 100, L"hello world...", 14);
+
             EndPaint(hWnd, &ps);
         }
         break;
