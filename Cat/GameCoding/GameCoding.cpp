@@ -1,4 +1,4 @@
-// GameCoding.cpp : Defines the entry point for the application.
+ï»¿// GameCoding.cpp : Defines the entry point for the application.
 //
 
 #include "framework.h"
@@ -22,10 +22,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-    // 1. À©µµ¿ì Ã¢ Á¤º¸ »ı¼º
+    // 1. ìœˆë„ìš° ì°½ ì •ë³´ ìƒì„±
 	MyRegisterClass(hInstance);
 
-    // 2. À©µµ¿ì Ã¢ »ı¼º
+    // 2. ìœˆë„ìš° ì°½ ìƒì„±
     if (!InitInstance (hInstance, nCmdShow))
     {
         return FALSE;
@@ -139,7 +139,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
 
-            // ¹®ÀÚ
+            // ë¬¸ì
             ::TextOutW(hdc, 100, 100, L"hello world...", 14);
 
             EndPaint(hWnd, &ps);
