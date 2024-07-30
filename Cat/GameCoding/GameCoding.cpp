@@ -40,10 +40,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // 로직
     // 렌더링
 
-    while (::GetMessage(&msg, nullptr, 0, 0))
+    while (true)
     {
-        ::TranslateMessage(&msg);
-        ::DispatchMessage(&msg);
+        if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        {
+            ::TranslateMessage(&msg);
+            ::DispatchMessage(&msg);
+        }
+        else
+        {
+        }
     }
 
     return (int) msg.wParam;
