@@ -1,6 +1,8 @@
 #include <iostream>
 
+using namespace std;
+
 int main()
 {
-    auto ret = 10 <=> 20;
+    cout << "hello world2" << endl;
 }
