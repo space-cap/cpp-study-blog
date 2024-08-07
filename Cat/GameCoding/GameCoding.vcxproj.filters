@@ -27,17 +27,11 @@
     <Filter Include="Source Files\99. Headers">
       <UniqueIdentifier>{fdb63186-6df3-40b7-8ae3-fef372a7ad2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\99. Headers\Andromeda">
+      <UniqueIdentifier>{f9437db4-5b07-4b32-8d1d-5a5d6815f404}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Source Files\99. Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Source Files\99. Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Source Files\99. Headers</Filter>
-    </ClInclude>
     <ClInclude Include="GameCoding.h">
       <Filter>Source Files\00. MainGame</Filter>
     </ClInclude>
@@ -52,6 +46,18 @@
     </ClInclude>
     <ClInclude Include="Types.h">
       <Filter>Source Files\99. Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Source Files\99. Headers\Andromeda</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files\99. Headers\Andromeda</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files\99. Headers\Andromeda</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Source Files\00. MainGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files\99. Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\00. MainGame</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

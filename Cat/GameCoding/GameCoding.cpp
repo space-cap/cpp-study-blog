@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "framework.h"
 #include "GameCoding.h"
+#include "Game.h"
 
 #define MAX_LOADSTRING 100
 
@@ -11,6 +12,7 @@ int mousePosY;
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+HWND g_hWnd;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -31,14 +33,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    MSG msg;
+    Game game;
+    game.Init(g_hWnd);
+
+    MSG msg = {};
 
     // 3. Main message loop:
     // 입력
     // 로직
     // 렌더링
 
-    while (true)
+    while (msg.message !=WM_QUIT)
     {
         if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
@@ -48,6 +53,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         else
         {
             // 게임 로직
+            game.Update();
+            game.Render();
         }
     }
 
@@ -94,23 +101,25 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance; // Store instance handle in our global variable
 
-   RECT windowRect = { 0,0,800,600 };
-   ::AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, false);
+    RECT windowRect = { 0,0,800,600 };
+    ::AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, false);
 
-   HWND hWnd = CreateWindowW(L"GameCoding", L"Client", WS_OVERLAPPEDWINDOW,
-       CW_USEDEFAULT, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, nullptr, nullptr, hInstance, nullptr);
+    HWND hWnd = CreateWindowW(L"GameCoding", L"Client", WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, nullptr, nullptr, hInstance, nullptr);
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+    g_hWnd = hWnd;
 
-   ::ShowWindow(hWnd, nCmdShow);
-   ::UpdateWindow(hWnd);
+    if (!hWnd)
+    {
+        return FALSE;
+    }
 
-   return TRUE;
+    ::ShowWindow(hWnd, nCmdShow);
+    ::UpdateWindow(hWnd);
+
+    return TRUE;
 }
 
 //
