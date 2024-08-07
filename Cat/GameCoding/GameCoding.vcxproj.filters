@@ -44,6 +44,15 @@
     <ClInclude Include="pch.h">
       <Filter>Source Files\99. Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Defines.h">
+      <Filter>Source Files\99. Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Enums.h">
+      <Filter>Source Files\99. Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Source Files\99. Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCoding.rc">
