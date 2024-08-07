@@ -41,6 +41,9 @@
     <ClInclude Include="GameCoding.h">
       <Filter>Source Files\00. MainGame</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Source Files\99. Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCoding.rc">
@@ -58,6 +61,9 @@
   <ItemGroup>
     <ClCompile Include="GameCoding.cpp">
       <Filter>Source Files\00. MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files\99. Headers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
