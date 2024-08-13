@@ -6,10 +6,15 @@
 
 Game::Game()
 {
+	// 디버그 힙 할당 활성화
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	int* p = new int();
 }
 
 Game::~Game()
 {
+	// 프로그램 종료 시 메모리 누수 보고
 	_CrtDumpMemoryLeaks();
 }
 
