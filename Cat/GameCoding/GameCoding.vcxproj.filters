@@ -68,6 +68,7 @@
     <ClInclude Include="Utils.h">
       <Filter>Source Files\99. Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameCoding.rc">
@@ -100,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files\99. Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

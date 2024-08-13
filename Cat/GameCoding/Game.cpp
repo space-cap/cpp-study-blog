@@ -50,5 +50,10 @@ void Game::Render()
 		::TextOut(_hdc, 650, 10, str.c_str(), static_cast<int32>(str.size()));
 	}
 
+	// player?
 	::Rectangle(_hdc, 200, 200, 400, 400);
+
+	// monster
+
+	
 }
