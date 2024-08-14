@@ -30,6 +30,9 @@
     <Filter Include="Source Files\99. Headers\Andromeda">
       <UniqueIdentifier>{f9437db4-5b07-4b32-8d1d-5a5d6815f404}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\02. Scene\Game">
+      <UniqueIdentifier>{44fdf069-bf6f-4ec9-a897-0d13d8050886}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCoding.h">
@@ -71,8 +74,14 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Source Files\01. Manager</Filter>
     </ClInclude>
+    <ClInclude Include="DevScene.h">
+      <Filter>Source Files\02. Scene\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Source Files\02. Scene\Game</Filter>
+    </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Source Files\00. MainGame</Filter>
+      <Filter>Source Files\02. Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,8 +119,14 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files\01. Manager</Filter>
     </ClCompile>
+    <ClCompile Include="DevScene.cpp">
+      <Filter>Source Files\02. Scene\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Source Files\02. Scene\Game</Filter>
+    </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Source Files\00. MainGame</Filter>
+      <Filter>Source Files\02. Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
